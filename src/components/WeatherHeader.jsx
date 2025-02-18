@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, Text, View} from "react-native";
+import {Platform, StyleSheet, Text, View} from "react-native";
 
 const WeatherHeader = ({date}) => {
 
@@ -29,7 +29,7 @@ const WeatherHeader = ({date}) => {
 const styles = StyleSheet.create({
     headerContainer: {
         flexDirection: 'row',
-        marginTop: 20,
+        backgroundColor: Platform.OS === 'ios' ? 'white' : 'transparent',
     },
     header: {
         fontSize: 24,
