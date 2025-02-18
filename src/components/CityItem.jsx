@@ -1,12 +1,17 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {StyleSheet, Text, TouchableOpacity} from "react-native";
 import { useNavigation } from '@react-navigation/native';
 import {WEATHER_DETAILS_SCREEN} from "../utils/constants";
+import { useDispatch } from "react-redux";
+import {saveCurrentCity} from "../redux/slices/generalInfoSlice";
 
 const CityItem = ({city, state, country, coordinates}) => {
-
+    const dispatch = useDispatch();
     const navigation = useNavigation();
-    const navigateToWeatherDetails = () => navigation.navigate(WEATHER_DETAILS_SCREEN, {city, state, country, coordinates});
+    const navigateToWeatherDetails = () => {
+        dispatch(saveCurrentCity({city, state, country, coordinates}));
+        navigation.navigate(WEATHER_DETAILS_SCREEN);
+    }
 
     return (
         <TouchableOpacity onPress={navigateToWeatherDetails} style={styles.container}>

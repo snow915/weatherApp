@@ -1,12 +1,17 @@
 import {useState, useCallback} from "react";
 import {searchWeatherDetails} from "../services/weatherService";
+import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
+import {saveWeather} from "../redux/slices/generalInfoSlice";
 
 export const useWeather = () => {
-    const [responseWeather, setWeather] = useState([]);
+    const dispatch = useDispatch();
+    const coordinates = useSelector((state) => state.generalInfo.currentCity.coordinates);
+
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
-    const getWeather = useCallback(async (coordinates) => {
+    const getWeather = useCallback(async () => {
         try {
             setLoading(true);
             setError(null);
@@ -21,8 +26,7 @@ export const useWeather = () => {
             }, {});
 
             const result = Object.values(groupedData);
-            console.log(result);
-            setWeather(result);
+            dispatch(saveWeather(result));
         } catch (e) {
             setError(e);
         } finally {
@@ -30,5 +34,5 @@ export const useWeather = () => {
         }
     }, []);
 
-    return {weather: responseWeather, getWeather, loading};
+    return {getWeather, loading};
 };

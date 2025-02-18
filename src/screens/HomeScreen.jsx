@@ -1,13 +1,15 @@
-import React, {useState} from 'react';
+import React, {useMemo, useState} from 'react';
 import {View, Text, StyleSheet, FlatList, TextInput, ActivityIndicator} from "react-native";
 import CityItem from "../components/CityItem";
 import {useCities} from "../hooks/useCities";
 import {SEARCH_INPUT_PLACEHOLDER} from "../utils/constants";
+import { useSelector } from "react-redux";
 
 const HomeScreen = () => {
 
     const [query, setQuery] = useState('');
-    const {cities, getCities, loading, error} = useCities();
+    const { getCities, loading, error} = useCities();
+    const cities = useSelector((state) => state.generalInfo.responseCities);
 
     const handleQuery = () => getCities({query});
 

@@ -1,16 +1,17 @@
 import React, {useEffect} from 'react';
 import {StyleSheet, Text, View, SectionList, ActivityIndicator} from "react-native";
-import {useRoute} from '@react-navigation/native';
 import {useWeather} from "../hooks/useWeather";
 import WeatherItem from "../components/WeatherItem";
+import { useSelector } from "react-redux";
 
 const WeatherCityDetailsScreen = () => {
-    const route = useRoute();
-    const {city, coordinates, state, country} = route.params || {};
-    const {weather, getWeather, loading} = useWeather();
+    const {getWeather, loading} = useWeather();
+    const weather = useSelector((state) => state.generalInfo.responseWeather);
+    const currentCity = useSelector((state) => state.generalInfo.currentCity);
+    const {city, state, country} = currentCity;
 
     useEffect(() => {
-        getWeather(coordinates);
+        getWeather();
     }, []);
 
     const renderItem = ({item}) => <WeatherItem data={item}/>

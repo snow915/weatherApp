@@ -1,8 +1,10 @@
 import {useState, useCallback} from "react";
 import {searchCities} from "../services/citiesService";
+import { useDispatch } from "react-redux";
+import {saveCities} from "../redux/slices/generalInfoSlice";
 
 export const useCities = () => {
-    const [responseCities, setResponseCities] = useState([]);
+    const dispatch = useDispatch();
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
 
@@ -13,7 +15,7 @@ export const useCities = () => {
             const citiesList = await searchCities(query);
             //Hago dicha filtro porque el servicio entrega ubicaciones dentro de una misma ciudad
             const finalData = citiesList.filter(x => x.resultType === 'city');
-            setResponseCities(finalData);
+            dispatch(saveCities(finalData));
             if(finalData.length < 1){
                 setError('No se encontraron ciudades');
             } else {
@@ -26,5 +28,5 @@ export const useCities = () => {
         }
     }, []);
 
-    return {cities: responseCities, getCities, loading, error};
+    return {getCities, loading, error};
 };
