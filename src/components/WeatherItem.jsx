@@ -8,6 +8,8 @@ const WeatherItem = ({data}) => {
 
     const fahrenheitToCelsius = (kelvin) => (kelvin - 273.15).toFixed(2) + ' C';
     const formatHour = (date) => date.split(" ")[1].slice(0, 5)
+    const capitalizeFirstLetter = (str) => str.charAt(0).toUpperCase() + str.slice(1);
+
 
     return (
         <View style={styles.item}>
@@ -18,7 +20,7 @@ const WeatherItem = ({data}) => {
                 />
                 <View style={styles.weatherDescriptionContainer}>
                     <Text>{formatHour(weatherDate)} hrs</Text>
-                    <Text style={styles.title}>{weatherDescription[0].description}</Text>
+                    <Text style={styles.title}>{capitalizeFirstLetter(weatherDescription[0].description)}</Text>
                 </View>
             </View>
             <View style={styles.mainConditionsContainer}>
