@@ -21,7 +21,6 @@ export const useWeather = () => {
             }, {});
 
             const result = Object.values(groupedData);
-            console.log(result);
             setWeather(result);
         } catch (e) {
             setError(e);
