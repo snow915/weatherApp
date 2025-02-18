@@ -3,7 +3,7 @@ export const searchWeatherDetails = async (coordenates) => {
     if(coordenates.length > 0) {
         const lat = coordenates[0];
         const lon = coordenates[1];
-        const url = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${API}`;
+        const url = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&lang=es&appid=${API}`;
         const results = await fetch(url);
         const weatherDetails = await results.json();
         if(weatherDetails.cod != '200') return []

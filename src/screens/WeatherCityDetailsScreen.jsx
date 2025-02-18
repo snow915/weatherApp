@@ -3,6 +3,7 @@ import {StyleSheet, Text, View, SectionList, ActivityIndicator} from "react-nati
 import {useRoute} from '@react-navigation/native';
 import {useWeather} from "../hooks/useWeather";
 import WeatherItem from "../components/WeatherItem";
+import WeatherHeader from "../components/WeatherHeader";
 
 const WeatherCityDetailsScreen = () => {
     const route = useRoute();
@@ -14,7 +15,7 @@ const WeatherCityDetailsScreen = () => {
     }, []);
 
     const renderItem = ({item}) => <WeatherItem data={item}/>
-    const renderHeader = ({section: {date}}) => <Text style={styles.header}>{date}</Text>
+    const renderHeader = ({section: {date}}) => <WeatherHeader date={date} />
 
     return (
         <View style={styles.container}>
@@ -48,9 +49,6 @@ const styles = StyleSheet.create({
     },
     subtitle: {
         marginLeft: 5,
-    },
-    header: {
-        fontSize: 24,
     },
 });
 
