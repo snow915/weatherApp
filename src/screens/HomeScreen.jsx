@@ -1,30 +1,31 @@
 import React, {useState} from 'react';
-import {View, Text, StyleSheet, FlatList, TextInput} from "react-native";
+import {View, Text, StyleSheet, FlatList, TextInput, ActivityIndicator} from "react-native";
 import CityItem from "../components/CityItem";
 import {useCities} from "../hooks/useCities";
+import {SEARCH_INPUT_PLACEHOLDER} from "../utils/constants";
 
 const HomeScreen = () => {
 
     const [query, setQuery] = useState('');
-    const {cities, getCities} = useCities({query});
+    const {cities, getCities, loading, error} = useCities();
 
     const handleQuery = () => getCities({query});
 
     const renderItem = ({item}) => {
         const {city, state, country, latitude, longitude} = item;
-        return <CityItem city={city} state={state} country={country} coordenates={[latitude, longitude]} />
+        return <CityItem city={city} state={state} country={country} coordinates={[latitude, longitude]}/>
     };
 
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>ReservamosWeatherApp</Text>
             <TextInput onChangeText={setQuery} value={query} style={styles.input}
-                       placeholder="Ciudad de México, Monterrey..." onEndEditing={handleQuery} />
-            <FlatList
+                       placeholder={SEARCH_INPUT_PLACEHOLDER} onEndEditing={handleQuery}/>
+            {error && cities.length < 1 && <Text>{error}</Text>}
+            {loading ? <ActivityIndicator size="large" color="black"/> : <FlatList
                 data={cities}
                 renderItem={renderItem}
                 keyExtractor={(item) => item.id.toString()}
-            />
+            />}
 
         </View>
     );
@@ -39,7 +40,7 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         height: 40,
         padding: 10,
-        marginVertical: 20
+        marginBottom: 20
     },
     title: {
         fontSize: 25,

@@ -1,16 +1,35 @@
-import React from 'react';
-import {StyleSheet, Text, View} from "react-native";
-import { useRoute } from '@react-navigation/native';
+import React, {useEffect} from 'react';
+import {StyleSheet, Text, View, SectionList, ActivityIndicator} from "react-native";
+import {useRoute} from '@react-navigation/native';
+import {useWeather} from "../hooks/useWeather";
+import WeatherItem from "../components/WeatherItem";
 
 const WeatherCityDetailsScreen = () => {
     const route = useRoute();
-    const { city, coordenates } = route.params || {};
+    const {city, coordinates, state, country} = route.params || {};
+    const {weather, getWeather, loading} = useWeather();
+
+    useEffect(() => {
+        getWeather(coordinates);
+    }, []);
+
+    const renderItem = ({item}) => <WeatherItem data={item}/>
+    const renderHeader = ({section: {date}}) => <Text style={styles.header}>{date}</Text>
 
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>WeatherCityDetailsScreen</Text>
-            <Text>{city}</Text>
-            <Text>{coordenates}</Text>
+            <View style={styles.headerTitleContainer}>
+                <Text style={styles.title}>{city} - {state}</Text>
+                <Text style={styles.subtitle}>{country}</Text>
+            </View>
+            {loading ?
+                <ActivityIndicator size="large" color="black"/>
+                : <SectionList
+                    sections={weather}
+                    keyExtractor={(item, index) => item + index}
+                    renderItem={renderItem}
+                    renderSectionHeader={renderHeader}
+                />}
         </View>
     );
 };
@@ -20,17 +39,19 @@ const styles = StyleSheet.create({
         flex: 1,
         padding: 20,
     },
-    input: {
-        borderWidth: 1,
-        height: 40,
-        padding: 10,
-        marginVertical: 20
+    headerTitleContainer: {
+        marginBottom: 20,
     },
     title: {
         fontSize: 25,
         fontWeight: 'bold',
-        marginTop: 10
-    }
+    },
+    subtitle: {
+        marginLeft: 5,
+    },
+    header: {
+        fontSize: 24,
+    },
 });
 
 export default WeatherCityDetailsScreen;
